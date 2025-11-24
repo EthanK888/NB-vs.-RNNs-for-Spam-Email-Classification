@@ -1,0 +1,67 @@
+******************************   Milestone 2   ******************************
+Spam email classification using Naive Bayes
+Following paper "Detecting Email Spam with NLP: A Machine Learning Approach"
+https://ieeexplore.ieee.org/document/10486769
+
+This paper only had code for the preprocessing, which is processText function in my code. I only made 1 small change to this function, which was rejoining the string together for the pandas dataframe.
+All other code is created by me, with help from online sources of course since I had no idea how to do any of this beforehand.
+
+Ensure dependencies are installed:
+pip install pandas nltk scikit-learn matplotlib numpy
+
+To run the code, ensure that spam.csv is in the parent directory of spamclassifier.py. Then, assuming you're in the code directory, run with the following command:
+python spamclassifier.py
+
+It will ask for a seed input for the split randomization. I used 4 as the seed, so input that to reproduce my results. Everything else runs automatically, with the exception of the precision-recall curve which only appears when you close the confusion matrix and ROC curve windows.
+
+
+******************************   Milestone 3   ******************************
+
+Some code from milestone 2 (the spamclassifier.py file) was repurposed and reused for this. I put a lot of the code from that file into functions so it could be reused in this milestone.
+Code for the RNN classes and training loop is a modified version of the following link, which I used to help me learn how to do this project: https://www.geeksforgeeks.org/deep-learning/implementing-recurrent-neural-networks-in-pytorch
+
+RNNsetup.py includes both RNN classes, a class for the dataset, and many helper functions to abstract away most of the setup. The RNNs.py file is the training and evaluation code for the models.
+
+Before running, ensure dependencies are installed:
+pip install pandas nltk scikit-learn matplotlib numpy torch
+
+To run the code, ensure that spam.csv, simpleRNN_trained.pth, and LSTM_trained.pth are in the parent directory of the "code" directory. Then, assuming you're in the code directory, run with the following command:
+python RNNs.py
+
+It will ask which model you want to run. If you enter "RNN", it will evaluate the simple RNN. If you enter "LSTM" it will evaluate the LSTM.
+
+The .pth files are the RNN models that I trained. The code will detect that these files exist and just run the evaluation. If you want to retrain these models yourself, you can simply delete (or move) these files and run the code the same way and it will automatically train the models and evaluate.
+
+
+___Hyperparameters___
+Both models shared most of the same hyperparameters, but a few were different for each.
+
+Shared:
+Batch size - 64, although 32 also gave similar results
+    (BATCH_SIZE, line 13 of RNNs.py)
+Learning rate - 0.001
+    (lr, line 47 of RNNs.py)
+Number of epochs - 20
+    (numEpochs, line 56 of RNNs.py)
+Minimum frequency - 3
+    (MIN_FREQUENCY, line 14 of RNNsetup.py)
+    This is the minimum number of times words must appear in the dataset to be included in the vocab.
+Cutoff percentile - 92%
+    (line 119 of RNNsetup.py)
+    This is what determines the maximum length of each message (what to pad or cut to). It is the length of the message in the 92nd percentile of message lengths.
+
+Simple RNN:
+Embed size - 128
+    (embedSize, line 33 of RNNs.py)
+    This is the length of the dense vectors created in the embedding layer
+Hidden size - 256
+    (hiddenSize, line 34 of RNNs.py)
+    This is the size of the hidden states in the RNNs
+
+LSTM:
+Embed and hidden size - 512
+    (lines 38 and 39 in RNNs.py)
+Number of LSTM layers - 3
+    (num_layers, line 65 in RNNsetup.py)
+Dropout - 50%
+    (line 65 in RNNsetup.py)
